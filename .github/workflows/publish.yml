@@ -15,11 +15,11 @@ jobs:
         uses: actions/checkout@v3
 
       # Set up JDK
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
       # Build the JAR
       - name: Build JAR
@@ -27,7 +27,7 @@ jobs:
 
       # Upload the JAR as an artifact
       - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4.5.0
+        uses: actions/upload-artifact@v3
         with:
           name: app-jar
           path: build/libs/*.jar
@@ -39,7 +39,7 @@ jobs:
     steps:
       # Checkout repository
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v3
 
       # Download the built JAR artifact
       - name: Download JAR artifact
@@ -54,7 +54,7 @@ jobs:
 
       # Publish Release
       - name: Create GitHub Release
-        uses: ncipollo/release-action@v1.14.0
+        uses: ncipollo/release-action@v1
         with:
           artifacts: app-jar
           token: ${{ secrets.GITHUB_TOKEN }}
