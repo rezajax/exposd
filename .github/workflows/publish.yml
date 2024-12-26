@@ -1,0 +1,62 @@
+name: Build and Release JAR
+
+on:
+  push:
+    branches:
+      - master # این Workflow با هر push به شاخه main اجرا می‌شود
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up JDK
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Build the JAR
+      - name: Build JAR
+        run: ./gradlew clean build
+
+      # Upload the JAR as an artifact
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-jar
+          path: build/libs/*.jar
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Download the built JAR artifact
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-jar
+
+      # Publish Release
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: app-jar
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.sha }} # استفاده از SHA commit به عنوان تگ یونیک
+          releaseName: "Release for Commit ${{ github.sha }}"
+          body: |
+            This release contains the latest build of the project.
+            Download the JAR file below.
+          draft: false
+          prerelease: false
