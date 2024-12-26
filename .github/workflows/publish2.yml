@@ -1,64 +1,56 @@
-name: Build and Release JAR
+name: Build and Release JAR2
 
 on:
   push:
     branches:
-      - master # اجرا برای هر push روی شاخه main
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up JDK
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Build the JAR
       - name: Build JAR
         run: ./gradlew clean build
 
-      # Upload the JAR as an artifact
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v3
         with:
           name: app-jar
-          path: build/libs/*.jar
+          path: build/libs/exposd-all.jar # مسیر دقیق فایل JAR
 
   release:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Download the built JAR artifact
       - name: Download JAR artifact
         uses: actions/download-artifact@v3
         with:
           name: app-jar
 
-      # Generate a timestamp-based tag
       - name: Generate tag
         id: generate_tag
         run: echo "::set-output name=tag::v$(date +'%Y%m%d-%H%M%S')"
 
-      # Publish Release
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: app-jar
+          artifacts: exposd-all.jar # اشاره به فایل JAR دانلود شده
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.generate_tag.outputs.tag }} # استفاده از تگ بر اساس زمان
+          tag: ${{ steps.generate_tag.outputs.tag }}
           name: "Release ${{ steps.generate_tag.outputs.tag }}"
           body: |
             This release contains the latest build of the project.
