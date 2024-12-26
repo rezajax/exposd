@@ -3,7 +3,7 @@ name: Build and Release JAR
 on:
   push:
     branches:
-      - main # اجرا برای هر push روی شاخه main
+      - master # اجرا برای هر push روی شاخه main
 
 jobs:
   build:
