@@ -57,3 +57,22 @@ jobs:
             Download the JAR file below.
           draft: false
           prerelease: false
+
+      - name: install cowsay
+        run: |
+          sudo apt-get update
+          sudo apt-get install cowsay
+          cowsay "release is done: ${{ steps.generate_tag.outputs.tag }}"
+
+      - run: |
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" > release.txt
+          git config --local user.email "
+      - run: |
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_STEP_FILE
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_ENV
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_PATH
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_WORKSPACE
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_WORKSPACE/release.txt
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_WORKSPACE/$GITHUB_STEP_FILE
+          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_WORKSPACE/$GITHUB_ENV
+            echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
