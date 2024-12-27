@@ -67,4 +67,3 @@ jobs:
       - name: save release info
         run: |
           echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
-          echo "release is done: ${{ steps.generate_tag.outputs.tag }}" >> $GITHUB_ENV
